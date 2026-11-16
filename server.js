@@ -9,7 +9,8 @@ app.post('/chat', async (req, res) => {
     try {
         const { message } = req.body;
         
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`, {
+        // v1beta ki jagah v1 use kiya hai yahan
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -21,17 +22,13 @@ app.post('/chat', async (req, res) => {
 
         const data = await response.json();
         
-        // Console me print karo taaki Render logs me exact error dikhe
-        console.log("Gemini Response:", JSON.stringify(data, null, 2));
-
-        // Response check karke bhejo
         if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
             const replyText = data.candidates[0].content.parts[0].text;
             res.json({ reply: replyText });
         } else if (data.error) {
             res.json({ reply: `⚠️ API Error: ${data.error.message}` });
         } else {
-            res.json({ reply: "⚠️ Gemini API returned empty structure. Check your Render environment variables." });
+            res.json({ reply: "⚠️ Gemini API returned empty structure." });
         }
 
     } catch (error) {
