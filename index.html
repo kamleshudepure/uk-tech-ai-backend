@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UK Tech AI — THE DIGITAL MIND</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Marked.js for Markdown Rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Highlight.js for Code Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/tokyo-night-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        midnight: '#070b14',
+                        surface: '#0f172a',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #070b14;
+            color: #f8fafc;
+            overflow-x: hidden;
+            font-size: 16px;
+        }
+
+        /* Ambient Teal & Emerald Neural Glow Background */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            background:
+                radial-gradient(circle at 12% 15%, rgba(20, 184, 166, 0.14) 0%, transparent 45%),
+                radial-gradient(circle at 88% 85%, rgba(16, 185, 129, 0.11) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.05) 0%, transparent 65%);
+        }
+
+        /* Glassmorphism Panels */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.78);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* High-Contrast Input Dock */
+        .glass-input-box {
+            background: rgba(11, 18, 32, 0.96);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1.5px solid rgba(20, 184, 166, 0.45);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-input-box:focus-within {
+            border-color: rgba(52, 211, 153, 0.95);
+            box-shadow: 0 0 36px rgba(20, 184, 166, 0.26);
+        }
+
+        /* Digital Brain Logo Glow */
+        .brain-glow {
+            box-shadow: 0 0 26px rgba(20, 184, 166, 0.38), inset 0 0 12px rgba(52, 211, 153, 0.25);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(7, 11, 20, 0.7);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(20, 184, 166, 0.35);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(20, 184, 166, 0.65);
+        }
+
+        /* Spacious Markdown Content Styling */
+        .markdown-body h1, .markdown-body h2, .markdown-body h3 {
+            color: #ffffff;
+            font-weight: 700;
+            margin-top: 1.4rem;
+            margin-bottom: 0.7rem;
+        }
+        .markdown-body h1 { font-size: 1.55rem; }
+        .markdown-body h2 { font-size: 1.3rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 0.35rem; }
+        .markdown-body h3 { font-size: 1.12rem; color: #5eead4; }
+        .markdown-body p {
+            margin-bottom: 0.95rem;
+            line-height: 1.75;
+            color: #e2e8f0;
+            font-size: 1rem;
+        }
+        .markdown-body ul, .markdown-body ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.1rem;
+            color: #e2e8f0;
+            font-size: 1rem;
+        }
+        .markdown-body ul { list-style-type: disc; }
+        .markdown-body ol { list-style-type: decimal; }
+        .markdown-body li {
+            margin-bottom: 0.45rem;
+            line-height: 1.7;
+        }
+        .markdown-body strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+        .markdown-body a {
+            color: #2dd4bf;
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+        .markdown-body blockquote {
+            border-left: 4px solid #14b8a6;
+            padding: 0.65rem 1.1rem;
+            margin: 1.1rem 0;
+            color: #cbd5e1;
+            font-style: italic;
+            background: rgba(20, 184, 166, 0.08);
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+        .markdown-body code:not(pre code) {
+            background: rgba(20, 184, 166, 0.18);
+            color: #99f6e4;
+            padding: 0.18rem 0.45rem;
+            border-radius: 0.35rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+        }
+        .markdown-body pre {
+            position: relative;
+            margin: 1.15rem 0;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: #0b101d !important;
+        }
+        .markdown-body pre code {
+            display: block;
+            padding: 1.15rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .markdown-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.15rem 0;
+            font-size: 0.95rem;
+        }
+        .markdown-body th, .markdown-body td {
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 0.7rem 0.9rem;
+            text-align: left;
+        }
+        .markdown-body th {
+            background: rgba(20, 184, 166, 0.18);
+            color: #ffffff;
+        }
+
+        /* Mic Active Pulse */
+        @keyframes micPulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1.06); box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .mic-active {
+            animation: micPulse 1.5s infinite;
+            background-color: rgba(239, 68, 68, 0.25) !important;
+            color: #f87171 !important;
+            border-color: rgba(239, 68, 68, 0.65) !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-teal-500/30 selection:text-teal-200">
+
+    <!-- Ambient Glow Background -->
+    <div class="ambient-bg"></div>
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-30 glass-panel border-b border-white/10 px-4 sm:px-6 lg:px-8 py-3">
+        <div class="max-w-[1800px] mx-auto flex items-center justify-between gap-3">
+            <!-- Left: Sidebar Toggle & Brand Identity -->
+            <div class="flex items-center gap-3">
+                <button id="toggleSidebarBtn" class="p-2.5 rounded-xl text-gray-300 hover:text-white hover:bg-white/10 transition" title="Toggle Session History Sidebar">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+                        <line x1="9" y1="3" x2="9" y2="21"></line>
+                    </svg>
+                </button>
+
+                <div class="flex items-center gap-3 cursor-pointer select-none" onclick="startNewChat()">
+                    <!-- Custom Glowing Teal-to-Emerald Circuit Digital Brain SVG Logo -->
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-teal-400 via-emerald-500 to-cyan-600 flex items-center justify-center brain-glow p-2 relative overflow-hidden group shrink-0">
+                        <div class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition"></div>
+                        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-slate-950">
+                            <path d="M17.5 6.5C13.5 6.5 10.5 9.2 10.5 12.6C8.3 13.4 6.8 15.5 6.8 18C6.8 20.6 8.4 22.8 10.7 23.5C11.1 26.8 13.9 29.5 17.5 29.5V6.5Z" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M18.5 6.5C22.5 6.5 25.5 9.2 25.5 12.6C27.7 13.4 29.2 15.5 29.2 18C29.2 20.6 27.6 22.8 25.3 23.5C24.9 26.8 22.1 29.5 18.5 29.5V6.5Z" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M17.5 12.5H13.5L11.5 14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                            <circle cx="11" cy="15" r="1.4" fill="currentColor"/>
+                            <path d="M17.5 19H12.5L10.8 20.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                            <circle cx="10.5" cy="21" r="1.4" fill="currentColor"/>
+                            <path d="M17.5 24.5H14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                            <circle cx="14" cy="24.5" r="1.3" fill="currentColor"/>
+                            <path d="M18.5 12.5H22.5L24.5 14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                            <circle cx="25" cy="15" r="1.4" fill="currentColor"/>
+                            <path d="M18.5 19H23.5L25.2 20.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                            <circle cx="25.5" cy="21" r="1.4" fill="currentColor"/>
+                            <path d="M18.5 24.5H21.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                            <circle cx="22" cy="24.5" r="1.3" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-extrabold text-xl tracking-tight bg-gradient-to-r from-white via-teal-100 to-emerald-300 bg-clip-text text-transparent">UK Tech AI</span>
+                        </div>
+                        <p class="text-[11px] font-bold tracking-[0.22em] text-teal-400 uppercase">THE DIGITAL MIND</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Center: 4 Response Mode Pills -->
+            <div class="hidden xl:flex items-center gap-1 bg-white/[0.04] p-1.5 rounded-xl border border-white/10">
+                <button onclick="setMode('smart')" data-mode="smart" class="mode-btn active px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-teal-500 text-slate-950 transition">Smart Chat</button>
+                <button onclick="setMode('summary')" data-mode="summary" class="mode-btn px-3.5 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white transition">Quick Summary</button>
+                <button onclick="setMode('code')" data-mode="code" class="mode-btn px-3.5 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white transition">Code & Tech</button>
+                <button onclick="setMode('deep')" data-mode="deep" class="mode-btn px-3.5 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white transition">Deep Dive</button>
+            </div>
+
+            <!-- Right: Live Google Search Toggle, Settings Gear, New Chat -->
+            <div class="flex items-center gap-2.5 sm:gap-3">
+                <button id="webSearchToggle" onclick="toggleWebSearch()" class="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/35 hover:bg-emerald-500/25 transition" title="Toggle Live Google Search Grounding">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                    <span class="hidden sm:inline">Live Web:</span>
+                    <span id="webSearchStatus">ON</span>
+                </button>
+
+                <button onclick="openSettingsModal()" class="p-2.5 rounded-xl text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 transition" title="API Key Settings">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </button>
+
+                <button onclick="startNewChat()" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-950 bg-gradient-to-r from-teal-400 to-emerald-500 hover:from-teal-300 hover:to-emerald-400 shadow-lg shadow-teal-500/25 transition" title="Start New Chat">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span class="hidden sm:inline">New Chat</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Full-Screen Workspace -->
+    <div class="relative z-10 flex-1 max-w-[1800px] w-full mx-auto flex overflow-hidden">
+
+        <!-- Collapsible Left Sidebar with Session History -->
+        <aside id="historySidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-80 transform -translate-x-full lg:translate-x-0 transition-all duration-300 ease-in-out glass-panel lg:bg-slate-950/60 border-r border-white/10 flex flex-col h-[calc(100vh-69px)] top-[69px] shrink-0">
+            <div class="p-4 border-b border-white/10 space-y-3">
+                <button onclick="startNewChat()" class="w-full py-2.5 px-4 rounded-xl bg-teal-500/15 hover:bg-teal-500/25 border border-teal-500/35 text-teal-200 text-xs font-bold flex items-center justify-center gap-2 transition">
+                    <svg class="w-4 h-4 text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>New Chat Session</span>
+                </button>
+
+                <div class="flex items-center justify-between pt-1">
+                    <div class="flex items-center gap-2 text-xs font-bold text-gray-300 uppercase tracking-wider">
+                        <svg class="w-4 h-4 text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <span>Chat History</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <button onclick="clearAllHistory()" class="text-xs text-gray-400 hover:text-rose-400 px-2 py-1 rounded-lg hover:bg-rose-500/10 transition font-medium" title="Clear All History">
+                            Clear History
+                        </button>
+                        <button id="closeSidebarBtn" class="lg:hidden p-1 text-gray-400 hover:text-white rounded-lg" title="Close Sidebar">
+                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="historyList" class="flex-1 overflow-y-auto p-3 space-y-2">
+                <!-- Saved sessions injected dynamically -->
+            </div>
+
+            <div class="p-4 border-t border-white/10 text-xs text-gray-400 flex flex-col gap-1">
+                <div class="flex items-center justify-between">
+                    <span>Session Memory</span>
+                    <span id="historyCount" class="px-2 py-0.5 rounded-md bg-white/10 text-gray-200 font-semibold">0 chats</span>
+                </div>
+                <div class="text-teal-400 font-semibold mt-0.5">UK Tech AI • Digital Mind</div>
+            </div>
+        </aside>
+
+        <!-- Mobile Backdrop -->
+        <div id="sidebarBackdrop" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-30 hidden lg:hidden"></div>
+
+        <!-- Main Spacious Chat Stream & Tall Bottom Input Area -->
+        <main class="flex-1 flex flex-col h-[calc(100vh-69px)] relative overflow-hidden min-w-0">
+
+            <!-- Tablet/Mobile Mode Selector Strip -->
+            <div class="xl:hidden flex items-center gap-2 overflow-x-auto px-4 sm:px-8 py-2.5 border-b border-white/10 bg-midnight/90 backdrop-blur-md shrink-0">
+                <button onclick="setMode('smart')" data-mode="smart" class="mode-btn active px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap bg-teal-500 text-slate-950 transition">Smart Chat</button>
+                <button onclick="setMode('summary')" data-mode="summary" class="mode-btn px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap bg-white/5 text-gray-300 transition">Quick Summary</button>
+                <button onclick="setMode('code')" data-mode="code" class="mode-btn px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap bg-white/5 text-gray-300 transition">Code & Tech</button>
+                <button onclick="setMode('deep')" data-mode="deep" class="mode-btn px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap bg-white/5 text-gray-300 transition">Deep Dive</button>
+            </div>
+
+            <!-- Scrollable Chat Messages Container (Wide max-w-7xl) -->
+            <div id="chatScrollContainer" class="flex-1 overflow-y-auto px-4 sm:px-8 lg:px-12 py-6 scroll-smooth">
+                <div class="max-w-7xl w-full mx-auto flex flex-col min-h-full">
+
+                    <!-- Welcome Screen -->
+                    <div id="welcomeScreen" class="my-auto py-8">
+                        <div class="text-center mb-10">
+                            <!-- Large Glowing Circuit Digital Brain Emblem -->
+                            <div class="w-24 h-24 mx-auto mb-6 rounded-3xl bg-gradient-to-br from-teal-400/20 via-emerald-500/20 to-cyan-500/20 border-2 border-teal-400/40 flex items-center justify-center brain-glow">
+                                <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-14 h-14 text-teal-300">
+                                    <path d="M17.5 6.5C13.5 6.5 10.5 9.2 10.5 12.6C8.3 13.4 6.8 15.5 6.8 18C6.8 20.6 8.4 22.8 10.7 23.5C11.1 26.8 13.9 29.5 17.5 29.5V6.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M18.5 6.5C22.5 6.5 25.5 9.2 25.5 12.6C27.7 13.4 29.2 15.5 29.2 18C29.2 20.6 27.6 22.8 25.3 23.5C24.9 26.8 22.1 29.5 18.5 29.5V6.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M17.5 12.5H13.5L11.5 14.5" stroke="#34d399" stroke-width="1.8" stroke-linecap="round"/>
+                                    <circle cx="11" cy="15" r="1.5" fill="#34d399"/>
+                                    <path d="M17.5 19H12.5L10.8 20.7" stroke="#34d399" stroke-width="1.8" stroke-linecap="round"/>
+                                    <circle cx="10.5" cy="21" r="1.5" fill="#34d399"/>
+                                    <path d="M17.5 24.5H14.5" stroke="#34d399" stroke-width="1.8" stroke-linecap="round"/>
+                                    <circle cx="14" cy="24.5" r="1.4" fill="#34d399"/>
+                                    <path d="M18.5 12.5H22.5L24.5 14.5" stroke="#2dd4bf" stroke-width="1.8" stroke-linecap="round"/>
+                                    <circle cx="25" cy="15" r="1.5" fill="#2dd4bf"/>
+                                    <path d="M18.5 19H23.5L25.2 20.7" stroke="#2dd4bf" stroke-width="1.8" stroke-linecap="round"/>
+                                    <circle cx="25.5" cy="21" r="1.5" fill="#2dd4bf"/>
+                                    <path d="M18.5 24.5H21.5" stroke="#2dd4bf" stroke-width="1.8" stroke-linecap="round"/>
+                                    <circle cx="22" cy="24.5" r="1.4" fill="#2dd4bf"/>
+                                </svg>
+                            </div>
+                            <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-2">
+                                UK Tech AI
+                            </h1>
+                            <p class="text-sm sm:text-base font-bold tracking-[0.28em] text-teal-400 uppercase mb-4">
+                                THE DIGITAL MIND
+                            </p>
+                            <p class="text-base text-gray-300 max-w-2xl mx-auto leading-relaxed">
+                                Continuous multi-turn conversational intelligence. Ask complex questions, follow up seamlessly across turns, write syntax-highlighted code, or search the live web with verified citations.
+                            </p>
+                        </div>
+
+                        <!-- 4 Starter Cards -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <button onclick="launchStarterPrompt('What are the latest breakthroughs in Artificial Intelligence this week? Provide live web sources.', 'smart')" class="glass-panel hover:bg-white/[0.08] hover:border-teal-500/50 p-5 rounded-2xl text-left transition group flex flex-col gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-teal-500/15 text-teal-400 flex items-center justify-center group-hover:scale-110 transition">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-base font-bold text-gray-100 group-hover:text-teal-300 transition">Live Web Research</div>
+                                    <div class="text-sm text-gray-400 mt-1">Real-time search & verified links</div>
+                                </div>
+                            </button>
+
+                            <button onclick="launchStarterPrompt('Build a clean, modular REST API in Node.js and Express with error handling.', 'code')" class="glass-panel hover:bg-white/[0.08] hover:border-emerald-500/50 p-5 rounded-2xl text-left transition group flex flex-col gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center group-hover:scale-110 transition">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="16 18 22 12 16 6"></polyline>
+                                        <polyline points="8 6 2 12 8 18"></polyline>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-base font-bold text-gray-100 group-hover:text-emerald-300 transition">Code & Architecture</div>
+                                    <div class="text-sm text-gray-400 mt-1">Production-ready code & explanations</div>
+                                </div>
+                            </button>
+
+                            <button onclick="launchStarterPrompt('Summarize the key trends shaping cloud computing and edge AI systems.', 'summary')" class="glass-panel hover:bg-white/[0.08] hover:border-cyan-500/50 p-5 rounded-2xl text-left transition group flex flex-col gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-cyan-500/15 text-cyan-400 flex items-center justify-center group-hover:scale-110 transition">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="8" y1="6" x2="21" y2="6"></line>
+                                        <line x1="8" y1="12" x2="21" y2="12"></line>
+                                        <line x1="8" y1="18" x2="21" y2="18"></line>
+                                        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                                        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                                        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-base font-bold text-gray-100 group-hover:text-cyan-300 transition">Quick Summary</div>
+                                    <div class="text-sm text-gray-400 mt-1">Crisp executive bullet briefs</div>
+                                </div>
+                            </button>
+
+                            <button onclick="launchStarterPrompt('Provide a deep-dive technical comparison between WebSockets, Server-Sent Events, and WebRTC.', 'deep')" class="glass-panel hover:bg-white/[0.08] hover:border-teal-500/50 p-5 rounded-2xl text-left transition group flex flex-col gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-teal-500/15 text-teal-400 flex items-center justify-center group-hover:scale-110 transition">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                                        <polyline points="2 17 12 22 22 17"></polyline>
+                                        <polyline points="2 12 12 17 22 12"></polyline>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div class="text-base font-bold text-gray-100 group-hover:text-teal-300 transition">Technical Deep Dive</div>
+                                    <div class="text-sm text-gray-400 mt-1">In-depth systems & protocol analysis</div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Continuous Multi-Turn Messages Stream -->
+                    <div id="messagesContainer" class="hidden space-y-7 pb-6">
+                        <!-- Chat bubbles injected dynamically -->
+                    </div>
+
+                    <!-- Thinking Indicator -->
+                    <div id="typingIndicator" class="hidden pb-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-teal-400 via-emerald-500 to-cyan-600 flex items-center justify-center shrink-0 brain-glow">
+                                <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-slate-950 animate-pulse">
+                                    <path d="M17.5 6.5C13.5 6.5 10.5 9.2 10.5 12.6C8.3 13.4 6.8 15.5 6.8 18C6.8 20.6 8.4 22.8 10.7 23.5C11.1 26.8 13.9 29.5 17.5 29.5V6.5Z" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                                    <path d="M18.5 6.5C22.5 6.5 25.5 9.2 25.5 12.6C27.7 13.4 29.2 15.5 29.2 18C29.2 20.6 27.6 22.8 25.3 23.5C24.9 26.8 22.1 29.5 18.5 29.5V6.5Z" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                                    <circle cx="12" cy="16" r="1.6" fill="currentColor"/>
+                                    <circle cx="24" cy="16" r="1.6" fill="currentColor"/>
+                                    <circle cx="12" cy="21" r="1.6" fill="currentColor"/>
+                                    <circle cx="24" cy="21" r="1.6" fill="currentColor"/>
+                                </svg>
+                            </div>
+                            <div class="glass-panel rounded-2xl rounded-tl-sm px-5 py-4 border border-teal-500/35 flex items-center gap-3.5">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-teal-400 animate-bounce" style="animation-delay: 0ms"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-bounce" style="animation-delay: 150ms"></span>
+                                    <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-bounce" style="animation-delay: 300ms"></span>
+                                </div>
+                                <span id="typingStatusText" class="text-sm text-teal-200 font-semibold">UK Tech AI is thinking...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Bottom Fixed Input Dock -->
+            <div class="sticky bottom-0 z-20 bg-gradient-to-t from-[#070b14] via-[#070b14]/95 to-transparent pt-4 pb-6 px-4 sm:px-8 lg:px-12">
+                <div class="max-w-7xl mx-auto">
+                    <div class="glass-input-box rounded-2xl p-3 shadow-2xl">
+                        <div class="flex items-center gap-2 px-2 pb-2 border-b border-white/10 text-xs text-gray-400">
+                            <span id="activeModeLabel" class="font-semibold text-teal-400">Smart Chat Mode</span>
+                            <span>•</span>
+                            <span id="activeSearchLabel" class="text-emerald-400">Web Search Active</span>
+                            <span class="ml-auto text-[11px] text-gray-500">Press Enter to send, Shift+Enter for newline</span>
+                        </div>
+                        <div class="flex items-end gap-2 pt-2">
+                            <textarea id="userInput" rows="1" placeholder="Ask UK Tech AI anything about code, systems, or research..." class="flex-1 bg-transparent text-white placeholder-gray-500 text-base focus:outline-none resize-none px-2 py-1.5 max-h-36 font-sans" onkeydown="handleKeyNavigation(event)" oninput="autoResizeTextarea(this)"></textarea>
+                            
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <button id="micBtn" onclick="toggleSpeechInput()" class="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition border border-white/10" title="Voice Input">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                                        <path d="M19 10v1a7 7 0 0 1-14 0v-1"></path>
+                                        <line x1="12" y1="19" x2="12" y2="23"></line>
+                                        <line x1="8" y1="23" x2="16" y2="23"></line>
+                                    </svg>
+                                </button>
+
+                                <button id="sendBtn" onclick="handleSendMessage()" class="p-2.5 rounded-xl bg-gradient-to-r from-teal-400 to-emerald-500 hover:from-teal-300 hover:to-emerald-400 text-slate-950 font-bold shadow-lg shadow-teal-500/25 transition disabled:opacity-50 disabled:cursor-not-allowed" title="Send Message">
+                                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 border border-teal-500/30 shadow-2xl space-y-5">
+            <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <svg class="w-5 h-5 text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    Backend & API Settings
+                </h3>
+                <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-white p-1 rounded-lg">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">Backend API URL</label>
+                    <input type="text" id="backendUrlInput" class="w-full bg-slate-900/90 border border-white/15 rounded-xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-teal-400" value="https://uk-tech-ai-backend.onrender.com">
+                    <p class="text-[11px] text-gray-400 mt-1.5">Your secure Render backend proxy URL.</p>
+                </div>
+            </div>
+            <div class="flex justify-end gap-3 pt-2 border-t border-white/10">
+                <button onclick="closeSettingsModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-white/5 hover:bg-white/10 text-gray-300 transition">Cancel</button>
+                <button onclick="saveSettings()" class="px-5 py-2 rounded-xl text-xs font-bold bg-teal-500 text-slate-950 hover:bg-teal-400 transition">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        const DEFAULT_BACKEND_URL = "https://uk-tech-ai-backend.onrender.com";
+        let BACKEND_URL = localStorage.getItem('uk_tech_backend_url') || DEFAULT_BACKEND_URL;
+        
+        let currentMode = 'smart';
+        let webSearchEnabled = true;
+        let chatSessions = JSON.parse(localStorage.getItem('uk_tech_chat_sessions') || '[]');
+        let currentSessionId = null;
+        let currentMessages = [];
+
+        // Configure marked.js
+        marked.setOptions({
+            highlight: function(code, lang) {
+                if (lang && hljs.getLanguage(lang)) {
+                    try {
+                        return hljs.highlight(code, { language: lang }).value;
+                    } catch (__) {}
+                }
+                return hljs.highlightAuto(code).value;
+            },
+            breaks: true,
+            gfm: true
+        });
+
+        // Initialize App on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderHistoryList();
+            if (chatSessions.length > 0) {
+                loadSession(chatSessions[0].id);
+            } else {
+                startNewChat();
+            }
+
+            // Sidebar toggle listeners
+            document.getElementById('toggleSidebarBtn').addEventListener('click', toggleSidebar);
+            document.getElementById('closeSidebarBtn').addEventListener('click', toggleSidebar);
+            document.getElementById('sidebarBackdrop').addEventListener('click', toggleSidebar);
+        });
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('historySidebar');
+            const backdrop = document.getElementById('sidebarBackdrop');
+            sidebar.classList.toggle('-translate-x-full');
+            backdrop.classList.toggle('hidden');
+        }
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                if (btn.getAttribute('data-mode') === mode) {
+                    btn.className = "mode-btn active px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-teal-500 text-slate-950 transition";
+                } else {
+                    btn.className = "mode-btn px-3.5 py-1.5 rounded-lg text-xs font-medium text-gray-300 hover:text-white transition bg-white/5";
+                }
+            });
+
+            const modeNames = {
+                'smart': 'Smart Chat Mode',
+                'summary': 'Quick Summary Mode',
+                'code': 'Code & Tech Mode',
+                'deep': 'Deep Dive Mode'
+            };
+            document.getElementById('activeModeLabel').textContent = modeNames[mode] || 'Smart Chat Mode';
+        }
+
+        function toggleWebSearch() {
+            webSearchEnabled = !webSearchEnabled;
+            const statusSpan = document.getElementById('webSearchStatus');
+            const searchLabel = document.getElementById('activeSearchLabel');
+            const toggleBtn = document.getElementById('webSearchToggle');
+
+            if (webSearchEnabled) {
+                statusSpan.textContent = "ON";
+                searchLabel.textContent = "Web Search Active";
+                toggleBtn.className = "flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/35 hover:bg-emerald-500/25 transition";
+            } else {
+                statusSpan.textContent = "OFF";
+                searchLabel.textContent = "Web Search Inactive";
+                toggleBtn.className = "flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10 transition";
+            }
+        }
+
+        function autoResizeTextarea(el) {
+            el.style.height = 'auto';
+            el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+        }
+
+        function handleKeyNavigation(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSendMessage();
+            }
+        }
+
+        function startNewChat() {
+            currentSessionId = 'session_' + Date.now();
+            currentMessages = [];
+            
+            document.getElementById('welcomeScreen').classList.remove('hidden');
+            document.getElementById('messagesContainer').classList.add('hidden');
+            document.getElementById('messagesContainer').innerHTML = '';
+            document.getElementById('userInput').value = '';
+            
+            if (window.innerWidth < 1024) {
+                const sidebar = document.getElementById('historySidebar');
+                if (!sidebar.classList.contains('-translate-x-full')) {
+                    toggleSidebar();
+                }
+            }
+        }
+
+        function launchStarterPrompt(promptText, mode) {
+            setMode(mode);
+            document.getElementById('userInput').value = promptText;
+            handleSendMessage();
+        }
+
+        async function handleSendMessage() {
+            const inputEl = document.getElementById('userInput');
+            const text = inputEl.value.trim();
+            if (!text) return;
+
+            inputEl.value = '';
+            inputEl.style.height = 'auto';
+
+            // Hide welcome screen, show messages container
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('messagesContainer').classList.remove('hidden');
+
+            // Push User Message
+            currentMessages.push({ role: 'user', content: text });
+            appendMessageBubble('user', text);
+
+            // Show typing indicator
+            const typingIndicator = document.getElementById('typingIndicator');
+            typingIndicator.classList.remove('hidden');
+            scrollToBottom();
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: text,
+                        mode: currentMode,
+                        webSearch: webSearchEnabled,
+                        history: currentMessages.slice(0, -1)
+                    })
+                });
+
+                const data = await response.json();
+                typingIndicator.classList.add('hidden');
+
+                if (data.reply) {
+                    currentMessages.push({ role: 'assistant', content: data.reply });
+                    appendMessageBubble('assistant', data.reply);
+                    saveCurrentSession(text);
+                } else {
+                    appendMessageBubble('assistant', '⚠️ Server returned an empty response. Please check your API key configuration.');
+                }
+            } catch (err) {
+                typingIndicator.classList.add('hidden');
+                appendMessageBubble('assistant', '❌ **Connection Error**: Could not connect to your Render backend server (`' + BACKEND_URL + '`). Please verify your deployment status.');
+                console.error(err);
+            }
+
+            scrollToBottom();
+        }
+
+        function appendMessageBubble(role, content) {
+            const container = document.getElementById('messagesContainer');
+            const wrapper = document.createElement('div');
+
+            if (role === 'user') {
+                wrapper.className = "flex justify-end";
+                wrapper.innerHTML = `
+                    <div class="max-w-[85%] sm:max-w-[75%] rounded-2xl rounded-tr-sm px-5 py-3.5 bg-gradient-to-r from-teal-600 to-emerald-600 text-white shadow-lg text-base leading-relaxed">
+                        ${escapeHtml(content)}
+                    </div>
+                `;
+            } else {
+                wrapper.className = "flex items-start gap-4";
+                const renderedHtml = marked.parse(content);
+                wrapper.innerHTML = `
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-teal-400 via-emerald-500 to-cyan-600 flex items-center justify-center shrink-0 brain-glow mt-1">
+                        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-slate-950">
+                            <path d="M17.5 6.5C13.5 6.5 10.5 9.2 10.5 12.6C8.3 13.4 6.8 15.5 6.8 18C6.8 20.6 8.4 22.8 10.7 23.5C11.1 26.8 13.9 29.5 17.5 29.5V6.5Z" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                            <path d="M18.5 6.5C22.5 6.5 25.5 9.2 25.5 12.6C27.7 13.4 29.2 15.5 29.2 18C29.2 20.6 27.6 22.8 25.3 23.5C24.9 26.8 22.1 29.5 18.5 29.5V6.5Z" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                            <circle cx="12" cy="16" r="1.6" fill="currentColor"/>
+                            <circle cx="24" cy="16" r="1.6" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="glass-panel flex-1 rounded-2xl rounded-tl-sm px-6 py-5 border border-teal-500/30 markdown-body shadow-xl">
+                        ${renderedHtml}
+                    </div>
+                `;
+            }
+
+            container.appendChild(wrapper);
+            // Highlight code blocks
+            container.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        }
+
+        function scrollToBottom() {
+            const scroller = document.getElementById('chatScrollContainer');
+            scroller.scrollTop = scroller.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        function saveCurrentSession(firstMessage) {
+            let sessionTitle = firstMessage.length > 32 ? firstMessage.substring(0, 32) + '...' : firstMessage;
+            let existingIndex = chatSessions.findIndex(s => s.id === currentSessionId);
+
+            if (existingIndex >= 0) {
+                chatSessions[existingIndex].messages = currentMessages;
+                chatSessions[existingIndex].updatedAt = Date.now();
+            } else {
+                chatSessions.unshift({
+                    id: currentSessionId,
+                    title: sessionTitle,
+                    messages: [...currentMessages],
+                    createdAt: Date.now()
+                });
+            }
+
+            localStorage.setItem('uk_tech_chat_sessions', JSON.stringify(chatSessions));
+            renderHistoryList();
+        }
+
+        function renderHistoryList() {
+            const listEl = document.getElementById('historyList');
+            const countEl = document.getElementById('historyCount');
+            countEl.textContent = `${chatSessions.length} chats`;
+
+            if (chatSessions.length === 0) {
+                listEl.innerHTML = `<div class="text-center py-6 text-gray-500 text-xs">No chat sessions yet.</div>`;
+                return;
+            }
+
+            listEl.innerHTML = chatSessions.map(session => `
+                <div onclick="loadSession('${session.id}')" class="group flex items-center justify-between p-3 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/5 hover:border-teal-500/30 cursor-pointer transition ${session.id === currentSessionId ? 'border-teal-500/50 bg-teal-500/10' : ''}">
+                    <div class="flex items-center gap-2.5 truncate text-xs font-medium text-gray-300 group-hover:text-white">
+                        <svg class="w-4 h-4 text-teal-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        <span class="truncate">${escapeHtml(session.title)}</span>
+                    </div>
+                    <button onclick="event.stopPropagation(); deleteSession('${session.id}')" class="opacity-0 group-hover:opacity-100 p-1 text-gray-400 hover:text-rose-400 rounded transition" title="Delete Chat">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function loadSession(sessionId) {
+            const session = chatSessions.find(s => s.id === sessionId);
+            if (!session) return;
+
+            currentSessionId = session.id;
+            currentMessages = [...session.messages];
+
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            const container = document.getElementById('messagesContainer');
+            container.classList.remove('hidden');
+            container.innerHTML = '';
+
+            currentMessages.forEach(msg => {
+                appendMessageBubble(msg.role, msg.content);
+            });
+
+            renderHistoryList();
+            scrollToBottom();
+
+            if (window.innerWidth < 1024) {
+                const sidebar = document.getElementById('historySidebar');
+                if (!sidebar.classList.contains('-translate-x-full')) {
+                    toggleSidebar();
+                }
+            }
+        }
+
+        function deleteSession(sessionId) {
+            chatSessions = chatSessions.filter(s => s.id !== sessionId);
+            localStorage.setItem('uk_tech_chat_sessions', JSON.stringify(chatSessions));
+            renderHistoryList();
+            if (currentSessionId === sessionId) {
+                if (chatSessions.length > 0) {
+                    loadSession(chatSessions[0].id);
+                } else {
+                    startNewChat();
+                }
+            }
+        }
+
+        function clearAllHistory() {
+            if (confirm("Are you sure you want to clear all chat sessions?")) {
+                chatSessions = [];
+                localStorage.removeItem('uk_tech_chat_sessions');
+                renderHistoryList();
+                startNewChat();
+            }
+        }
+
+        function openSettingsModal() {
+            document.getElementById('backendUrlInput').value = BACKEND_URL;
+            document.getElementById('settingsModal').classList.remove('hidden');
+        }
+
+        function closeSettingsModal() {
+            document.getElementById('settingsModal').classList.add('hidden');
+        }
+
+        function saveSettings() {
+            const urlInput = document.getElementById('backendUrlInput').value.trim();
+            if (urlInput) {
+                BACKEND_URL = urlInput.endsWith('/') ? urlInput.slice(0, -1) : urlInput;
+                localStorage.setItem('uk_tech_backend_url', BACKEND_URL);
+                alert("Backend URL successfully updated!");
+                closeSettingsModal();
+            } else {
+                alert("Please enter a valid URL.");
+            }
+        }
+
+        // Speech Recognition Setup
+        let recognition = null;
+        function toggleSpeechInput() {
+            const micBtn = document.getElementById('micBtn');
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert("Speech recognition is not supported in your browser.");
+                return;
+            }
+
+            if (!recognition) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = 'en-US';
+
+                recognition.onstart = () => {
+                    micBtn.classList.add('mic-active');
+                };
+
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    const inputEl = document.getElementById('userInput');
+                    inputEl.value += (inputEl.value ? ' ' : '') + transcript;
+                    autoResizeTextarea(inputEl);
+                };
+
+                recognition.onerror = () => {
+                    micBtn.classList.remove('mic-active');
+                };
+
+                recognition.onend = () => {
+                    micBtn.classList.remove('mic-active');
+                };
+            }
+
+            if (micBtn.classList.contains('mic-active')) {
+                recognition.stop();
+            } else {
+                recognition.start();
+            }
+        }
+    </script>
+</body>
+</html>
