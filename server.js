@@ -5,7 +5,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Route ko '/api/chat' se badalkar '/chat' kar do
 app.post('/chat', async (req, res) => {
     try {
         const { message } = req.body;
@@ -22,9 +21,18 @@ app.post('/chat', async (req, res) => {
 
         const data = await response.json();
         
-        // Gemini ke response se text extract karke frontend ko bhejna
-        const replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated";
-        res.json({ reply: replyText });
+        // Console me print karo taaki Render logs me exact error dikhe
+        console.log("Gemini Response:", JSON.stringify(data, null, 2));
+
+        // Response check karke bhejo
+        if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+            const replyText = data.candidates[0].content.parts[0].text;
+            res.json({ reply: replyText });
+        } else if (data.error) {
+            res.json({ reply: `⚠️ API Error: ${data.error.message}` });
+        } else {
+            res.json({ reply: "⚠️ Gemini API returned empty structure. Check your Render environment variables." });
+        }
 
     } catch (error) {
         console.error("Error:", error);
